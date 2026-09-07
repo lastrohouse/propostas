@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#000000">
+<meta name="robots" content="noindex">
+<style>*{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Diagnóstico Adelielson Júnior</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&display=swap">
+
+<style>
+:root{
+  --bg:#000000;
+  --fg:#D0CFCA;
+  --muted:#7C7C77;
+  --dim:#565651;
+  --line:#242422;
+  --line-2:#33332F;
+  --card:#0A0A09;
+  --yellow:#EFD84B;
+  --bone:#D0CFCA;
+  --ink:#000000;
+  --r:4px;
+}
+*{box-sizing:border-box}
+body{
+  background:var(--bg);
+  color:var(--fg);
+  font-family:Archivo,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:16px; line-height:1.62; -webkit-font-smoothing:antialiased;
+}
+h1,h2{font-family:Archivo,-apple-system,sans-serif; font-weight:900; letter-spacing:-0.03em; line-height:1.02; text-wrap:balance; margin:0}
+h3{font-family:Archivo,sans-serif; font-weight:700; letter-spacing:-0.012em; line-height:1.15; margin:0}
+p{margin:0}
+a{color:inherit}
+::selection{background:var(--yellow); color:var(--ink)}
+:focus-visible{outline:2px solid var(--yellow); outline-offset:3px}
+
+.shell{max-width:1260px; margin:0 auto; padding:26px 20px 80px; display:grid;
+  grid-template-columns:214px minmax(0,1fr); gap:38px; align-items:start}
+@media (max-width:900px){.shell{grid-template-columns:minmax(0,1fr); gap:22px; padding:20px 16px 60px}}
+
+/* rail */
+.rail{position:sticky; top:26px; display:flex; flex-direction:column}
+@media (max-width:900px){.rail{position:static}}
+.mark img{display:block; width:150px; height:auto}
+.mark-sub{font-size:10px; font-weight:600; letter-spacing:0.26em; text-transform:uppercase;
+  color:var(--muted); margin:12px 0 26px}
+.nav{display:flex; flex-direction:column; border-top:1px solid var(--line)}
+@media (max-width:900px){.nav{flex-direction:row; flex-wrap:wrap; gap:6px; border-top:0}}
+.nav a{display:flex; align-items:baseline; gap:11px; padding:10px 2px; text-decoration:none;
+  font-size:12.5px; font-weight:500; color:var(--muted); border-bottom:1px solid var(--line);
+  transition:color .16s ease}
+.nav a:hover{color:var(--yellow)}
+.nav a b{font-size:10.5px; font-weight:600; color:var(--dim); font-variant-numeric:tabular-nums; transition:color .16s ease}
+.nav a:hover b{color:var(--yellow)}
+@media (max-width:900px){
+  .nav a{border:1px solid var(--line); border-radius:3px; padding:8px 11px}
+}
+.railfoot{margin-top:24px; font-size:11px; letter-spacing:0.03em; color:var(--dim); line-height:1.6}
+@media (max-width:900px){.railfoot{display:none}}
+
+/* flow */
+.flow{display:flex; flex-direction:column; gap:56px; min-width:0}
+section{scroll-margin-top:26px}
+.eyebrow{display:flex; align-items:center; gap:10px; font-size:10px; font-weight:600;
+  letter-spacing:0.24em; text-transform:uppercase; color:var(--muted); margin-bottom:16px}
+.eyebrow i{width:7px; height:7px; background:var(--yellow); display:block; font-style:normal}
+h2{font-size:clamp(27px,3.8vw,42px); margin-bottom:18px}
+h3{font-size:18px}
+.lede{font-size:17.5px; color:var(--fg)}
+.prose{display:flex; flex-direction:column; gap:15px; max-width:64ch}
+.prose p{color:#B3B2AD}
+.dim{color:var(--muted)}
+.dim2{color:var(--muted); margin-bottom:12px}
+strong{font-weight:700; color:var(--fg)}
+mark{background:transparent; color:var(--yellow); font-weight:600}
+
+/* hero */
+.hero{border:1px solid var(--line-2); padding:clamp(28px,5vw,56px)}
+.hero .heromark{width:min(320px,72%); height:auto; display:block; margin-bottom:clamp(28px,5vw,46px)}
+.hero .kicker{font-size:10px; font-weight:600; letter-spacing:0.26em; text-transform:uppercase;
+  color:var(--muted); margin-bottom:20px; display:flex; align-items:center; gap:10px; flex-wrap:wrap}
+.hero .kicker i{width:7px;height:7px;background:var(--yellow);display:block;font-style:normal}
+.hero h1{font-size:clamp(32px,5.4vw,58px); margin-bottom:22px}
+.hero-meta{display:flex; flex-wrap:wrap; gap:0 36px; row-gap:16px; margin-top:34px;
+  padding-top:26px; border-top:1px solid var(--line-2)}
+.hero-meta div{min-width:132px}
+.hero-meta dt{font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:var(--dim); font-weight:600}
+.hero-meta dd{margin:6px 0 0; font-size:15px; font-weight:500}
+
+/* card */
+.card{background:var(--card); border:1px solid var(--line); border-radius:var(--r); padding:24px}
+
+/* stats */
+.stats{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1px; background:var(--line);
+  border:1px solid var(--line)}
+@media (max-width:640px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.stat{background:var(--bg); padding:18px 19px}
+.stat dt{font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:var(--dim); font-weight:600}
+.stat dd{margin:9px 0 0; font-weight:900; font-size:25px;
+  letter-spacing:-0.035em; font-variant-numeric:tabular-nums; line-height:1.1}
+.stat dd small{font-size:12.5px; font-weight:500; letter-spacing:0; font-family:Archivo,sans-serif;
+  color:var(--muted); display:block; margin-top:4px}
+
+/* frentes */
+.frentes{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px}
+@media (max-width:760px){.frentes{grid-template-columns:minmax(0,1fr)}}
+.frente{background:var(--card); border:1px solid var(--line); border-radius:var(--r); padding:24px;
+  display:flex; flex-direction:column; gap:11px}
+.frente .n{font-size:10px; font-weight:600; letter-spacing:0.2em; text-transform:uppercase;
+  color:var(--muted); display:flex; align-items:center; gap:9px}
+.frente .n span{width:6px;height:6px;flex:none;background:var(--yellow)}
+.frente p{font-size:14.5px; color:var(--muted)}
+
+/* estruturas */
+.estruturas{display:flex; flex-direction:column; gap:12px}
+.est{background:var(--card); border:1px solid var(--line); border-radius:var(--r); overflow:hidden}
+.est-head{display:flex; align-items:center; gap:14px; padding:19px 24px; flex-wrap:wrap}
+.chip{font-weight:900; font-size:13px; letter-spacing:-0.01em;
+  padding:5px 10px; flex:none; background:var(--bone); color:var(--ink)}
+.est-head h3{flex:1 1 220px; min-width:0}
+.tick{font-size:12.5px; font-weight:600; color:var(--yellow); font-variant-numeric:tabular-nums; white-space:nowrap}
+.spec{display:grid; grid-template-columns:134px minmax(0,1fr); border-top:1px solid var(--line)}
+@media (max-width:640px){.spec{grid-template-columns:minmax(0,1fr)}}
+.spec dt{padding:13px 24px; font-size:10px; font-weight:600; letter-spacing:0.18em;
+  text-transform:uppercase; color:var(--dim); border-top:1px solid var(--line)}
+.spec dd{margin:0; padding:13px 24px; font-size:14.5px; color:#B3B2AD; border-top:1px solid var(--line)}
+@media (max-width:640px){
+  .spec dt{padding-bottom:0}
+  .spec dd{padding-top:5px; border-top:0}
+}
+.spec dt:first-of-type,.spec dd:first-of-type{border-top:0}
+
+/* rotas */
+.rotas{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px}
+@media (max-width:820px){.rotas{grid-template-columns:minmax(0,1fr)}}
+.rota{background:var(--card); border:1px solid var(--line); border-radius:var(--r); padding:24px;
+  display:flex; flex-direction:column; gap:12px}
+.rota .tag{font-size:10px; font-weight:600; letter-spacing:0.24em; text-transform:uppercase; color:var(--yellow)}
+.rota p{font-size:14.5px; color:var(--muted)}
+.rota .if{font-size:13.5px; padding-top:12px; border-top:1px solid var(--line); margin-top:auto; color:var(--muted)}
+.rota .if b{font-weight:700; color:var(--fg)}
+
+/* tabela */
+.tablewrap{overflow-x:auto; border:1px solid var(--line); border-radius:var(--r); background:var(--card)}
+table{border-collapse:collapse; width:100%; min-width:660px; font-size:14px}
+th,td{padding:13px 17px; text-align:left; border-bottom:1px solid var(--line); vertical-align:top}
+th{font-size:10px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--dim); white-space:nowrap}
+td{font-variant-numeric:tabular-nums; color:#B3B2AD}
+td:first-child{font-weight:600; white-space:nowrap; color:var(--fg)}
+tbody tr:last-child td{border-bottom:0}
+tr.total td{border-top:1px solid var(--bone); color:var(--fg)}
+tr.total td.big{font-weight:900; font-size:17px; letter-spacing:-0.03em; color:var(--yellow)}
+.mult{font-size:12px; color:var(--dim); font-family:Archivo,sans-serif}
+
+/* entregas */
+.entregas{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1px;
+  background:var(--line); border:1px solid var(--line); counter-reset:e}
+@media (max-width:760px){.entregas{grid-template-columns:minmax(0,1fr)}}
+.entrega{background:var(--bg); padding:17px 19px; display:flex; gap:13px; align-items:flex-start}
+.entrega::before{counter-increment:e; content:counter(e,decimal-leading-zero);
+  font-size:10.5px; font-weight:600; color:var(--yellow); font-variant-numeric:tabular-nums;
+  padding-top:3px; flex:none}
+.entrega b{font-weight:700; font-size:14.5px; display:block}
+.entrega span{font-size:13.5px; color:var(--muted)}
+
+/* timeline */
+.timeline{display:flex; flex-direction:column}
+.tl{display:grid; grid-template-columns:118px 1fr; gap:20px; padding:17px 0; border-top:1px solid var(--line)}
+@media (max-width:640px){.tl{grid-template-columns:minmax(0,1fr); gap:5px}}
+.tl:first-child{border-top:0}
+.tl .when{font-size:11px; font-weight:600; letter-spacing:0.16em; text-transform:uppercase;
+  color:var(--yellow); padding-top:3px}
+.tl b{font-weight:700; display:block; margin-bottom:3px}
+.tl p{font-size:14.5px; color:var(--muted)}
+
+.two{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px}
+@media (max-width:760px){.two{grid-template-columns:minmax(0,1fr) !important}}
+.out{display:flex; flex-wrap:wrap; gap:8px; margin-top:4px; list-style:none}
+.out li{list-style:none; font-size:13.5px; color:var(--muted); border:1px solid var(--line-2);
+  border-radius:3px; padding:8px 13px}
+
+/* invertido: investimento */
+.invert{background:var(--bone); color:var(--ink); padding:clamp(28px,5vw,56px)}
+.invert h2,.invert h3{color:var(--ink)}
+.invert .eyebrow{color:#55554F}
+.invert .eyebrow i{background:var(--ink)}
+.price{display:flex; align-items:baseline; gap:16px; flex-wrap:wrap; margin:4px 0 20px}
+.price .v{font-weight:900; font-size:clamp(46px,7.4vw,80px);
+  letter-spacing:-0.05em; line-height:1; color:var(--ink)}
+.price .u{font-size:13.5px; color:#55554F; line-height:1.5}
+.terms{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:0 28px; row-gap:16px;
+  margin-top:28px; padding-top:24px; border-top:1px solid rgba(0,0,0,.22)}
+@media (max-width:640px){.terms{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.terms dt{font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:#55554F; font-weight:600}
+.terms dd{margin:6px 0 0; font-size:15px; font-weight:600; color:var(--ink)}
+
+footer{margin-top:6px; padding-top:24px; border-top:1px solid var(--line);
+  display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
+  font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:var(--dim)}
+
+@media (prefers-reduced-motion:reduce){*{transition:none !important}}
+
+/* fases */
+.fases{display:flex; flex-direction:column; gap:12px}
+.fase{background:var(--card); border:1px solid var(--line); border-radius:var(--r); padding:24px}
+.fase-head{display:grid; grid-template-columns:auto minmax(0,1fr) auto; gap:18px; align-items:baseline; margin-bottom:14px}
+@media (max-width:640px){.fase-head{grid-template-columns:auto minmax(0,1fr)} .fase-head .val{grid-column:1/-1}}
+.fase .num{font-weight:900; font-size:13px; letter-spacing:-0.01em; padding:5px 10px; background:var(--bone); color:var(--ink)}
+.fase.now .num{background:var(--yellow)}
+.fase h3{font-size:20px}
+.fase .val{font-size:12.5px; font-weight:600; color:var(--yellow); white-space:nowrap; font-variant-numeric:tabular-nums}
+.fase .val.later{color:var(--muted)}
+.fase .obj{color:#B3B2AD; font-size:14.5px; max-width:64ch; margin-bottom:14px}
+.fase .grid{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; border-top:1px solid var(--line); padding-top:14px}
+@media (max-width:760px){.fase .grid{grid-template-columns:minmax(0,1fr)}}
+.fase .grid dt{font-size:10px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--dim); margin-bottom:6px}
+.fase .grid dd{margin:0; font-size:13.5px; color:#B3B2AD; line-height:1.55}
+.fase .grid dd b{color:var(--fg); font-weight:600}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <aside class="rail">
+    <div class="mark"><img src="data:image/png;base64,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" alt="Lastro House"></div>
+    <div class="mark-sub">House</div>
+    <nav class="nav">
+      <a href="#s1"><b>01</b>O ponto de partida</a>
+      <a href="#s2"><b>02</b>Retrato de hoje</a>
+      <a href="#s3"><b>03</b>O diagnóstico</a>
+      <a href="#s4"><b>04</b>Estruturas de produto</a>
+      <a href="#s5"><b>05</b>As três rotas</a>
+      <a href="#s6"><b>06</b>As quatro fases</a>
+      <a href="#s7"><b>07</b>Entregas e prazos</a>
+      <a href="#s8"><b>08</b>Investimento</a>
+    </nav>
+    <div class="railfoot">
+      Proposta comercial<br>
+      Adelielson Júnior<br>
+      Setembro de 2026
+    </div>
+  </aside>
+
+  <main class="flow">
+
+    <!-- HERO -->
+    <section class="hero">
+      <img class="heromark" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAkUAAACPCAYAAAD0kq86AAAkuklEQVR42u1d23XbyLLdM2v+yRMB4QiEE4EwEZgTgeAIhIlAcASGIzAUwaEjMPw7P6YjMBTBgBHc+4HCIgTxBaCqX6i9Fpc89qgJdNdjV3V19W/7H/9AoVAoFAqFYun4XadAoVAoFAqFQkmRQqFQKBQKhZIihUKhUCgUCiVFCoVCoVAoFEqKFAqFQqFQKF7jD50ChUKhsIIVgAhAAiCmP6/p0yEC0Aw+e/pUAF4Cm4+491nTz24e+ujmou79rOjP31W0FFPxmx7JVygUCmNOP+mRoHhAgKagBpADePZ0Tu4BbHtzwoWKiOOOfh5U/BRKihQKhcIuCYqFnL7P5KgjQikDKRxDkkqEl11TKClSKBQKp4lQSk4/Nuj0+84/ddDxrwBk9FlbfpaOID2ruCqUFCkUCoUcEUoceJ6anuWnA89yjzaDlTi4bjURpByaPVIoKVIoFIpgiNAQDT2XLWJkmgw19OkjGvH7OwAFtEhbUl8AD2q7lBQpFArFeGcfw/42kIvEyBQZatBuge1xuU5oQ+SoI6/xlXFr+F247pKebHH6QEG3ZiXcyGYqKVIoFIqRUW4GN+phXCVGG3JyifC7lGizOt9nPGeONsun5EhGT1LcnqXb0e84s32ppEihUCjOR7s53NweG4Oa3kHC8XSOMBcmQwV9uLZflBzxEuKODE0NGnLm9VVSpFAoFEx4IAOfBPROEsToHm3mJhJ6ZgkydGqt8xveoSaZ0Jqj8cRyjIxuYXlLTa/5UCgUijbj8QTgX8hvA9lAhLaOY8U03iONJ0GImh5R+SicPXimta5vnL8vRAZUV9raoJRZRvc0tjVopkihUCzdwGfws15oCvZEAg4z5msnSBoLIkSmt1E2NDe3ykBOhG1peKR3l9aVGnJbvhehmSKFQrHkaLc2ZORdQUzEYw5xkCBEFY37N+zUlbxgXF1UDuAXlpM1ugfwjWTHhK5EJGsPpl9UM0UKhXlnvMbxmGqE4xbE8GeHBsceLN2f696ngYNHWx2e/wx+Z4ZqvL0kFidkKLri1MdkOu7QZogi5ndp6Fk+OzK33yaQvsyh55fQl5ze0RYKIstKihSKAAxK3PskkCtKBUVWNY59QPbQizB9JUP73np2a9pg/HbCPV7fvzaFGN2RPHHPWwX3riS5p+ea4rjzwPTtPdr6Ohf0pYah7bRLpOiBlKlh+q6IFDtURu0bTBSz7QF8Xdi83uN4E3riwPN0znVHxn6JJOnWE0Y20OB43US3VlJZv1OnhVJcPm6+AX9BdQO3skND8lxPJALGHLeBOSiJSLuEGgZOAF4iRV/AW1kOMsx/KR9xwkmUBr6nAvDngoiQD1mIXe9zWMC65HDrJFlDetEnQQeL+t/gfHNHCUJUwc0La/v4geudr0MlRi5lh84hh2CR+x8WmJ7CDaEygYQcU4i9PVy/++octr0IsKRPaOtjorvyGBK0wzFb54KzfCanV9DP3RlHvmMmRBn82CnYzyBFEY5F4z4RI1PZoaanCzX9+eWE/kYkm1u8Tc7k9G+5REDxhwUDobCLB5jdRtgG5nRDOsKd0mdPDvI5kLXJLT6DiyToFD73CH3nyOOek3maQQxOBcMpltP48NR8ugwTTTh3ON5Vd21OXnp687Vnn4YEeytBPvVI/vKQWXC8q0Dm7hFhHuGOyWD9goUjsAJrY5oElaRXEYD/APhApMP1TEE+cOS7npPkmscdyZdPhIhDtyNMb31gMoj4BLkmnBWO96B9IBmYQhI/43QpT0c+Wdsi/G7BgCjsRgSx4e9cg782zca8/YC5Hh02I9wSwP/gT/8V0/1Tapqj1EMSNMR3vD5plZCTLBkDsL/gX+0aF0FI0dbouIiuXow7SG5IF2O09aTPTOv/fOZZI7SZJLZ5VlK0LNgiJ1uP56yLpOIFycmWnP+Tw8/Yj3ITQ7YrBvCOSNAz/D9lBByzQ30iM5cU1LQmPp403jDregn3MuWPmFc3dU4/cpKdvyFzgvLzCXntAu8dl73S7bPlYGORFCUU0fs2Xz9gt2mZbeQ0B65ljd6T45Vam/qE8e0M7yqwNS6Zg9U96buv9UPcBHvtkA1ZoT1VXoAvq1rjmDWVvqeuC+ybC/ZqNjFSUrQsB2cTqUdz1TWri1VsENNc3DlCVL8ROVkzj131It13aLd9hjoTgfdSVRdwICLDgQLAf+F3Bk3CTrpg++7Ae4FrR4begW+L7FZ5La6s3xclRYpbnIltxdx64kw6QhSp2LwhAzbrI57Af+9WQwY2QVv/8HHg0PcXSGJIxKhkGCODwasYhCB1MjeyHFQ8Mtq0IRmygeIGEvpjqo4qKVoGtg48wxrub0VJXWcQAtZoMzSmT6d1Re4507o0OPYw+g858nNbPfszfx8aMZozrzXNRwg3FeSCYycW3qeruysYdKeh+Ylhv3XHAdd7Hsakv6O3/n8XUhSFW8j0Oa5io4To5ijNRNTbL6SOGQx6hbfHg2+J8NmNroNyP5UM7HG+G7ZvkO7fFllY14rB5nZkKIKZmqFbUd0459VYHVVSFD4e4M5W0BpuHlFVQjRuDXfCZOCeHO4cgz4kQlOOB1+Th0lG1zGUE+W+RBj3fHUEPDegN6bQ6U/MIBuxY2RoChkdpaO6fRY+Mn2eqyigNURjDU0p5JzmNJPjIEJ9JDfOxR5uFKKPxSOmbevkaLNtodydlwWk/08MAV5FcvEhENI7ihj9AUXIsNGs8RZH49J9aA+wW3NVk1Nt6M/1FeVe08/I8tom5FS5aknmXERZ4XiNAKejvnV+1z0y9tUT2zB12yxDGPVDc+dhCmGXxIqCu3TmM2bw/7qfS8QouUb0lBSFjdTh53KBFJkyiH2jsyMSVIGnFuOOnHeC4z1WppBj/v1eUy+ilCJC/edKRvz/a3qe1BOnMpaANgjvHsNOjnz/ng2O16nM0eUC/mT/oom/syO9PigpWh44j+Hve1kKLlKUOaCAuQES0ZCxqYQcyk/6PPdIUkoOTPrd1uRc/5z4+48Yd6qsoo8J451M/L2C9MXl4uOx22Y1wqkf6uPJYBCxFxr3jhz91PeoyBb7Viwfz/i9Au3W4EloTVG4yBnHKsBfC5RZnh/p3k0NXp/aMBVh/0R7zPwdvV9tgDzcT5j7W+8r6+YxwbGXkAkyvZ1BFHdwt/h6bHZ0HygheoC5LPFeaP4eewHrFPuUkU75RojuZgboKc2dkqKFIWEapyEjvwPvvngGu31eJA1iDTdObTwTOcodmstHXG/C2OC4//8fw6RyLikC5ArROVCOcChloITI9LZ5ITDm04xxC5JRX2vDYkmbpaQoTHAew9+RYz8wK/cadgucE6Fx96S0LjmSjzTXjeBcXjt9dUt2qMLxJNCfsFe/8h7zt4oTuHff35htswJhnTDrsILZjvU1eGvMuvvL8onPkqDNJPu8rhx+Y31OP5UUhQnOKKgcGEpOx5pamp97IaNYk8K6aHC+kkGUIkbpFWe8P+OQG7y+auOzA/OXOqiHczEmO5LD/ys7LtmzyOD35cxrWE2Uz4KCtRAK5bkC2q2SomWA0+HXAyU6gHdbwFY0vRVUVpe3Gn4KvnuKt9uhl7JDDY41V387ZKw3jHOUwJ2rQCrclv1K0WYWQ8QTzGana/BliTpCFE94hgT+Z4f6/m3NqJ9KihaAlHGsUwRox/y8mceRxnCufKi9+A6ZGof1YF7PXeBa4XWtkGuGmls2Igfe6ZZTVg29e4g9aro5yD2VpamXVBcIJzsk4d8iJUXhg/tEVXnGqVaM37G1EE3HAmPmHslJDplTaRnOX+DakSGbtUI21jF2wCZce6c6QOfZx4MF/cyZgqT7CYSoRljZIamgZX3K95gmRREUvhj06oJSc2caMoNzJHEdQwW/TugchJxEgrcpfl/IUOeAuG1UY/mdrgUwnQMN7YRZnxCVhr9zD54tyAeMv7KjCJjgSujnegwpUgKzbBZdXjG0nMbeJCmSkOudh7LyDNkeRrVHZKhDKjCmTVJ0bdtsr4RIRO63DOM8jnz2hr43xOyQpH5iDClS+GcAIkbFfr6SaSiY2fp7Q/O0Fhiz9lRmCsGxt55Fq1LNPPcWo+r8CpFXQiQj93PndGwPogptdugrwkZi4kuUFIWDjHGs6ob/Z+fw819CJDBm46nMlMzP3h8r92wuJJ53bylq31whBAWAvwLOKNgiRBnmd4ceWxBeo83GhkpuJYL+i9C7z8JAdymoSQfxE8d6Ea4o4B5+7oWvPZWbAxma6Mw7nDNC6Yl1z4koVzg25vRpPSWi0MrSu+QX1i6H/SP3q14QxP0stghRjvkdoqeckCuxDGyFxn1RUhQmMmZD/jJCIRNmwfeRFEUey87hQnT7/UwGIhlEqmnv/81xTP3nmH5ZbAhR6M7Cuzzi/DZgBjeudihJ11PmcW0cu+cimlOffQmkiLN3GAa26w10+ywMgeE0LmOUbAf+DtfSx/Nrj6IYl3CqK3WBtyddPuOYIUmIcLiOXEjOvluwBcWJv29It1wgRJ9IX2rw9kRaIiEaE8D6jERoXCVFKjA3CckYQ8Xd4XoNO80cOdbgPlD5WgH4H153pa5xuQ9KPvjzyuH3k7rypbKwTtUZQpTAjaaMTz39zhnf+wuWR4jGBrA+Q2pt90qKVGAkDPmO+X2kSdHeM8W1iTuar23v7wpc74PSb/AZOU50pdatsPAe0YkgJ8b84l8OPPbmumQiaXPuAnOBEM1pKlkj3O7jJoKWs/5OSZHfeM8sMFMUlLvD9RqyWZdaaNyEor5Q0G2XRb15S3B7H5R8QHRdzBZtIJOa3xsmIo8niOce7hy5v+uRxJqJJHdXX8SG36UBz/1wd5iX6dlhGZAkvHslRSow15TsxREFzQXn7CBIjPJAiNGwT0pHiMbUyPTJ8hpuZouk5KwwTOxyhwnRZhA0JZjfCmBI2E2h04NnhjnZeSRjNmVHihTtz+mHkiK/BWbLOF4583cbxmdJIHMdR4dK2NH+ovXxlRDlJxzBy8S56JDBrWyRlMGtYW5bo6sjWp8gRAdH5rj/fPlMorZCW6htgxBUNK8cGcDdTEJXQgusxXyAkiJ/wRnl1pjXDfUgQDRSGwrBhIjm9AvMdeqWyjqkMwzwMFuUBqo/JsY9ly2IHCVEHWGLes/6caZsVrCTcSzA1yDxCfO3/EosA5K6VCopUhYtrWTc0VsqmFnYGVqjlL7rV48guXwSqzxhlOYeK+8btq1D5E8iCq1hLkv0NCCZLhEiDAhRjbYWbSq67bLY8DvUONbRSQUdU54pxMteh+Culx3O4U8lRWGBu9kcByn6Dt4tNMnMgkRm6xKiHkFqAHwjp3bvEEla4W1Txo9MclH35sGVgELiWXJDzz90rq4Rok89AlPPIKD97bK14XcowHvb/IrJ5uRYBjKDwd8raEdrP5EyCwjX/nTBrLQp5BrO5bB3DUMycBT7Ex/TDq7vdBrwZlLewa0+ThKOpTYkT0Pn6hoh6vciajD9gtR7sk2miXSN1x3aOWUuYni2JRzDl8rkKilSgZkvIBPG4nQ4MeTuz+oyGC5kL2K83RrYk1PZ03NKk6UXHLcoUvAXcrqS8pe60qOEmeLXovf8LhKifEAExhYmr+j3MgvP3wV1BwGZy5hkbAnIBce+qqe/7X/8c+7ffgkYjxz2LyP0HV/AlymqKYrnxDdm0lZB7v4sW5dHzkEzIEz9P8815hu0GaOfAeuPhF0DjSlNit7jWA9XkqN1hRANdWmKrb/HcdvKJCrw3HB/TqcqJpkzIWMuBP214PjJtQDtjysLoHBPYFLG8SQY+Y6ZFCVoj+dLGKxn8KS1TWLdm9/tGcLUfWqMy9C8BG50Q8gSuRhcDhsRFiOfz1Z2qIbMVtnQxkYeyZht5MLrfXWtdfvMLyTM41VCDiIHb2FkCr4TIKfGrgKRj44wDeWkT5QqhJ0JurbWvhnyDo+0vlvMa58hEahVg6BojK7aqB1qaM2kL8h9YJS5fAH6KV1LdNMc6umz5bJoqciD+5LYzplJndL6jvC7w8Y0hwURo3/RXvL6CNkmmS7hXsjg7gxE8Bsc685cJETrXiR+KwnoTpZVBglRR4YiA4SI4/i9tK12MWiRkoUaNxapKynyy6hzCkwp+Kw75vHWkE2t55Ddx3YNXcahI0m/yEHdB/zOqdC4Jgj1C4APjjnGYa1MjduLvh/BdwfaWDL0EWbqsDJGe11iGUgFx76ZoCopWqbA1JDdR+fuWQRhA3ogg14vVLYimt+KCNID/L2m5JwDlzC40nrkKlZnCNE10naP9iBGATN9h+oeOTFFhjp547JX1UJkTKrerwvSb25loKRomUbdROTBHUGvIZvJeEGbPWkWLmsRyUeN9qRjCOQo92xc19EnRA2u9yLakCxVkK0Z6T9fgvZk7WeYP6FXeWarQ9bR0QG1kiI/wG1IfCRFJpzQT7R1G7WKHEBE3HdyFMLFry7hC14fmd/ifOH+Cm3voj3k771ryOYkaFt42MquPIEv47EUGZPMEuUYue2spGh5LLqCmdoEias0EsjXvbxg2Vtpl8jRk0agi4vg+/g0IDfpBfLR1Q3lkN0q2+NYL/Q37G41cW6bmQgCXQlapN6znhKcKylyH9wX45k05juPnNyQGL3DcrdHLs39L/iTNRre56akaDqeBg4/x+ksxgPJSCFIhhqa/wTAf2G2XuiafnC9c41lZIlSyGWJ0ilyoaTIfXBGHqYVrQR/jU4Cc5eofsSxxkbRIoI/WaMt/G7W6BIhygfOf9ic8R7AD8j2HKpwLJz+ALcKkO/hfmNd1yC1td3N3yT5UFLkvtBwRrqV4eeX6FnETRSvoTsOreTordF58uAZfRrXR0L0Hu2Jsgoy13PscczA/Ak7hdO3EmVfg1eb+ilBoGvM6PiupGhZRt2GU98JjJlYeI8hOapVPJGjLbx1Eb5f6eECHs8QohWO22Q7AX2s6bsSuLU9ZkrWlhB8SR6AmCWPes2H20iYhcVGurnrWbRmnpd7S+/TkaPOGG7x9g6yJaEzbB8ce67Mk0DFZUdfDN67wLG2aM38fTWRgQp+9eXhLhRuFkKKpPRoOzdoUVK0nOijsPguhYASbB0wns/06Qp6tzhex7A0YtRA7n66sbgXWoMSy8gSvR845ppIUM1MhvZoM02+EaGh7HPa6d0CZEwqS5SB4V7H3/Y//jn3b/8nxA4/QnELvoE3UxRZVLYV+AuuG3qng6NKHy+QJGWQv1PqFnwRMro2dcgU7vD6PjNuVOT4Q3D+G/Bvoy9Bxn6Bf2ubjVtoTZG7homTEO0tK5pEz6I15BvCTcUL2os7P6CtiYiIIJW0FqEih/3j+lJRaKWEiEU+umLpl0DknRPlAmRMotaPjRApKXI74uZE4cA77QTG3HqynkOStCbSm9Ha7IgsNZ7L7Rr26yFyz8Z1BcMb70sBecwRzqXDEuR7CTLG/Y4ZmHefdPvMTcGpmceMHIhAVuCvSQCRi5AuTFzReq3Rbrv1f0aQ6wHDiRR2jhRviFxyy1iFNsMROiHqZKsmmUsEgplu7IPnc8a9RVvCvcMK3PjEGPA3NBa7ndFCa/eQMI+3hxsp2a5nUcY87jYwUnTAsVjw3Hvd9chSgmPmyRXk5EwPFnRnLTBuuTBClNDafUWbyeTU2Yjm8y/P5yxVGRs9Z1xyVOPynXuzoJki98BdhLbrRc/XHEaD8SnzaIQgx+Df8mrgbsG1adz3iJIUQbgVKcxniyQKOGu0V74sgRA1JD/9IGpF9oN7XjO4UZQ/BdxZogphZyI5dXMPhmP3l6CZIvecGrfx2SLsPjprMlCfVXzwnT6fe/KUEkGKDD+LaVL0Xugd84UQIpCcDJ3NgdayEpjXHfwrLNYs0Xg8MelmSWRaNADWQmu3kOoUTCZ+itMk6QPaTEcKs124E5gtqs0ExqwR5nULpwhRivPbEd8hc3rURzKQq4yNlrWcSb8/wMCOgJKisCOQpcC0A/YRzxbIUWJQdyS+Kw9QDk4RouwGx5xC5nLnh4Xb6BBlrI+5xLcmOTG2E6CkKNwIROdPcY4cxTDTpmHr8dqHGMGfIkT5jQ7nRUhmCrR1S0u0MSHKWB9PM4OVChZOFyspcgeJTsHs+VvpNNyEA9orOTLh74kNrYmE7oRGss8RojEHXwrwZ4vWnsy1RJZoF7CNmbttlqMtPjdec6akyA1I3ei9NGQ6BaPwGfJbtrGHulODv4bGd0LUkelMSG9d3/6WeO8iYNtSzdC9BBZPqSspUmce2jxqtmgcnoXlT5oUSZC6CuFct8BFiPryIkEYXScIW+bxSoR7pcfU02YV2QurfeeUFNnHHZZ3q7oU1tBtyCn4DLnMSCT43Fpgfd22cBIiyfmJATw6Oo8S2cgCYeL9RPnI0G6XWe83p6TIPjKdAp1PB5AKElUpSDjnUCJ4KUIEiuR3Quu5WoBuVBDqxmwZmwlkryZC7EyfOW3eaF+IUp0GViRo6xP6KdjuPrG456j7znpKFJghrC7aLzie9vBprX0gWrYI0VqAEPXlP2EmvWtyqi7dASaRjSwDtb3VSFtakFw6ZUeVFNnFVqdALLL7PnAImYABCO04bekRKZLY0ijhf5boPb3HeqAP3LL60nNq3Lpbwp37DLnfr0aYx/A/jdDHhtb5q4svottndpHpFIiRotUgAuVGHGik59MaS5BCn/GAdltLmhD1I/3aAyIyB8mCdexWPI3wZRXZzq+uvoySorAiXYU5wpkGOGcSWZJGYEyJLY0a7mQnpuBxQOoamiPJrMRBiMAkcKPoWuI+vRxh4enGd2pwLKZ2OhurpCisSFfxmhStBB3zGuFdLSJR5CqRSUgExvTZWT3hdYFrR4hMkDypI/o57Bddc9voCmEdw3+4UW/2cKyYWkmRe7iDHh2XxhrHmq290HeEFvXFnpCiTOAZfa3zGEbqNa2jydNNuZD+ZhbndQWZ3kSh4PHG98kB/NcnMmiaFNVQAFpLZDrS2wmNnyCsbFHqgc5vBMjbztP1+nSCECUWHNB3IYef03rbwFZAD0IpsB5mJs+9bwyLnamnQk+fmYfUMfzc83nZCji7jrR8h9xx8xztPnkI4J6fGvwZC4mAovBsnVZEQvqOe0//bSsiz+j718zjlpb0i1sXqoAIUX6DPuXwtGWJkiL/I5DOcHz0fF4qyNUm/ClIihK0qeTPns//1Nb8l7D3QH9K+FXnsUGb2YoHurO17IQOkDmi3w9sfLbThef2YUXvkF4JglL4fWBBa4osRVRQhTvpQBsh0rISnqMc9tL8XI42Fxh3xzzeHWR6E/m0TtWAEJVw5HoEyB3RN71G9+DNeO3hdwfrTu7SK2sf+06IlBSZh8QxfN8Vrh9p7oXGzmj8ndD4azIaPhKjzuBJgHvchHm82iMjfu7ajg+O6XAqMG6ENpNpCtxy5nPQen+CiA91KAHwNwLp8P/7FYOh4IWEwSgCmh+piDCDfLYo8pAYnbpBnXMtXxzXn9yTdXp/Yp0yuLll/l2IZHc67CMpquAnHq/YhwKBZIduJUUK/khPItINqWX8DnI9hTJBgz0kRncLJ0QSBFfi1JkPzuoRr7tUN2jrXVyuYcuFdNhUAJgwy5hvvYk2AL5dmO8agWWHlBTZQSYwZhXYHEluoaWGsgMRvcOTw/P8SM8oRYhqgeiRO6DYeeCsPg0cU+eMvjr+3N+FCEwK+RYY3OOX8Avddtk5fSsQYHaoj9/2P/4592+/BIxmI5QJcAnvzjDvWuC7YoRRTzR02FIRYULK/AlmekXVRMJcyeZtYObS11Tgnf8H3hNBW4fJxakj9x0h8iXrsKJnXjOPu0fbDNAX+xN5smYrXL44e49jtj1omCZFS8BvJ/7uQSBikDYONpVTijhXaE/qSBnsa+RoBzvp5nsiKqmB7+rmmBv/Mq5XfSZ4cYW4VgPbW8H+kfspuPVerLHIILd9yBkwSemChH0oL/j7HP63fLkZun3Gi+aCUHGjCHQOD5DbFkzIAEidkrkULZbkjL+gLZyVLBpd0Xs+oa0NqAy+r8T3cB+RrhyV/VMnzAq4c+R+LD5CJkOeQ+5AQ8w41s6DAPQTztcWdn+/GEIEaPNGE6RI4hi+y4ady5gkQmNv0aaAv5LDyQy+1xqvMzb7wachJ3KLA9z0jHjU+8Swl+HNIbNVEDOPVzoo86e2bTL43xQ0FbBVa5qrv4R0dAk2+lJ2qCFd9l32JkG3z3hR421a/puAgy/hVn8SiQimESSuERGPFS734LAtS+eM9toT2ecCZz2R5HNOxXDLpumR9xAgYQOBY40gJ/4vYDnrbGt+IRisiMi+YKHQ7TNZbISMwS7weZPcQlv3DMKBnE/t4BxEZz6uEqJEcHxO0upS9L4iwpAN5jJGWAWtqdC4JXi3oVeBylmH9yRf2ZlgcYt2q3axhEhJkTxyIQf0dQFzVwiOnfUM4As59EbFdRI6YyplSDfgzViXjszbHdot02QQ7MQBOqUXIX2OmG0sZ8DhUuDa9R3anXnHguZyCX5FSZHlKHArMG61kPmrBInKerA2HTGqVWwnZQEk20JEzOO5kIE51Sk4R1sjcwhUTnIhfc4g37toCvaO+KCnE+S7H2AnCLQJo5IiN9B3qlvIbHUUC5nLg3BUnw7++6cSo1FoaA6lo8skoICiO+1T4HWH6hThn/A5QK5xaglzV4DcSohsZ/vu6TnyE36oob9/hwX0HVJS5FZkJEG6fi5oDnfCznYYYWrG6HZClMBMU8rYE3m6hq7/UDbQ5xhhXdVzCZ+FiGkEt+6xqy3LWdeGIzoTGMRY2DF7LlKkjmEeS48Exi0WNo/Sd5VlJ/7uhYxGoWJ8NgqODZLzNfOz28D73rz1CVqM5RW15oK6PHcbrfFYzm7ZKttCC6lnkSLFdKRC4+4WOJeSEeAWp9PuB7T77KkGB29IeWLYqHIGFza2Cj7hbYFrhrDrh66tgVTAUWLeNtqBiRiZthmXtso6vY2hhdRKiixhI0SKqoUyfBvZog7PRALKhct0F33aKMiMGN/BtB34gbfbZQkW2hRvEOg0QrIyN4jyKQi6datMC6mVFFlFIhgFLdmISpKiS9HlC9pGmVssL2tUE8H/L/wvyDS5dg94u11WQabZoI+QLLrOaP5tkue18Pxd2yprSG//xLJqUJUULcyBVwueU8mU+xq3tU74iva0RroAclTRe76D3SJgzvutGgPP250uKweOMYfWcgwhVXQNshVTZYeDFEUGCHd+hnzl9P3PKmJKilxAIqQQpRpU/A25bFk64v99JrKwDYyo1mRQE3LgoRlVaSLb1XVkg+9MoCd9LumdBFldk25OqS/isDFbgXd6QHv1Vonrl7fqVpmSouCx0ykA0G5jZQIOLsH4kytfiTxEFJnWHs5nRUQoJqL3Ebq9MwWnbhqvEN51Hdx4gVxmvdPLseC4YigCT0PJbpvs3wtkqO4FMpqJZMAfF/5tTz+bE2zehAOIdHleOWBFi8/0eY9jZm6N1xel1hPkdT3DsP9NnzuKfhO4ecnsngx+93E9onTdyG9wPFqPnr3MocXUY/Q5hszhlJR0f2ymrsT82tCS3muKjq0o+Msu2CWVMyH8tv/xj86CQsGPFRnWjiDFMHeZa0POYD/4+JhW/5dp3nLwbmM94m1dxx6y98CFrCt7wUA4xfjt4F8MzzNWHjZEhNIrZKigj26TKSlSKLzGHRm7GK9vve9+3ur8697PukeCOiIUklP+AZ6sW4l2+3UuNmcyCQXabKFi+rxWgsQowbitzHvw1AzWRJ6rM3q5oWfb4notUkljKelWUqRQLM5BnIoQlxgZfgHf1kqMeUeUn/B2S6Om59PaIZ6goYJMRrUh8jFm/T/hch+zsdjjWIrSD4auoSIypDKmpEihUCwcD+A7dVihLUgdi3scuwL3UZCz0m2McIkRJymfIq9KhgxDT58pFAqXsWMcK0Gb7RlDhrqOwfEg4k+gnYIl8BNylzKvaS3HnAz7APP3IJZos0h/KiFSUqRQKBR9cByR7iO/QoxWaE82dmQo6f1bQ78fQofvpROjxxG/8zfabbRG8J072VoTEdO6IUvQ7TOFQuE6uIpe+6jRZqE6xxvh8inBCu02ijorc1gRUciExs8x7kTihn4nZSRCJcmhkmwlRQqFQnEzuItex5CnVJ2WdVJcQuZkWo02KzWG7HYnxlKMa7VRE7ne00+9l0xJkUKhUEzOGuxhrqlrA22O5xoecLzbixs7tLVDU8hv12ojwrG1RtP71PTR+jMlRQqFQsEG6V42HRkqoM3xXMZ7tFmarcDYNclYCc0OKilSKBQKD4hRDv5j0kqG/JSFhMhRAv5j/EqQlBQpFAqFF3jA8Z65Oeic3k7JkPe4R1vjk+DYNZ6TNFckJxW04F5JkUKhUDiIu16mIL4hW9CgrU3a0UedW7hY4XiiMBp81jPHLtFmFbVYWkmRQqFQOIvNhQxBrSRIMZAV4LZ7B+seqdaMYsD4Q6dAoVAEhBclPooRsgKVF0Uf2tFaoVAoFAqFQkmRQqFQKBQKhZIihUKhUCgUCiVFCoVCoVAoFH38P9ETfC/3xOduAAAAAElFTkSuQmCC" alt="Lastro House">
+      <div class="kicker"><i></i>Análise e diagnóstico · Proposta comercial</div>
+      <h1>Diagnóstico de Produto e Ecossistema</h1>
+      <p class="dim lede" style="max-width:52ch">Antes de construir qualquer produto, decidir quais produtos devem existir: em que ordem, para quem, por quanto e com qual mecanismo de diferenciação. E o caminho completo, em quatro fases, do papel ao produto validado.</p>
+      <dl class="hero-meta">
+        <div><dt>Cliente</dt><dd>Adelielson Júnior</dd></div>
+        <div><dt>Fase 1 · Diagnóstico</dt><dd>R$ 2.500</dd></div>
+        <div><dt>Fases 2 a 4</dt><dd>Orçadas ao fim da Fase 1</dd></div>
+        <div><dt>Início</dt><dd>Na assinatura</dd></div>
+        <div><dt>Validade</dt><dd>07/10/2026</dd></div>
+      </dl>
+    </section>
+
+    <!-- 01 -->
+    <section id="s1">
+      <div class="eyebrow"><i></i>01 · O ponto de partida</div>
+      <h2>Por que a gente não vai começar pelo produto.</h2>
+      <div class="prose">
+        <p class="lede">A sua ideia original era clara: investir na construção de um produto digital para sair do presencial e escalar o online. A intenção está certa. A ordem é que está invertida.</p>
+        <p>Hoje o seu atendimento é majoritariamente presencial, existem alguns alunos online que não viram escala, e você vem produzindo vídeo sem que o vídeo vire cliente. Construir um produto agora, em cima desse cenário, é gravar, editar, montar e publicar para só depois descobrir se a oferta funciona.</p>
+        <p>O que esta proposta faz é trocar a ordem: primeiro a decisão, depois a construção. E, diferente de uma proposta de diagnóstico isolada, esta mostra o caminho inteiro: <mark>quatro fases, do documento ao produto validado com gente de verdade.</mark></p>
+        <p>Você contrata a Fase 1 agora. As outras três são desenhadas dentro dela, com escopo e valor definidos quando a gente já souber exatamente o que vai construir.</p>
+      </div>
+    </section>
+
+    <!-- 02 -->
+    <section id="s2">
+      <div class="eyebrow"><i></i>02 · Retrato de hoje</div>
+      <h2>Um negócio que funciona no presencial e trava no online.</h2>
+      <dl class="stats" style="margin-bottom:20px">
+        <div class="stat"><dt>Atendimento</dt><dd>Presencial<small>predominante</small></dd></div>
+        <div class="stat"><dt>Online</dt><dd>Alguns alunos<small>sem escala</small></dd></div>
+        <div class="stat"><dt>Conteúdo</dt><dd>Vídeo<small>que não vira cliente</small></dd></div>
+        <div class="stat"><dt>Produto</dt><dd>Nenhum<small>só atendimento</small></dd></div>
+        <div class="stat"><dt>Receita</dt><dd>Por hora<small>amarrada à agenda</small></dd></div>
+        <div class="stat"><dt>Números</dt><dd>Fase 1<small>levantados no diagnóstico</small></dd></div>
+      </dl>
+      <div class="prose">
+        <p>O presencial funciona porque você está lá. É a sua presença, a sua correção, o seu acompanhamento. Esse é o ativo. O problema é que ele não sai da sala: <strong>a sua receita está amarrada às horas que você consegue estar presente.</strong></p>
+        <p>O online não escala pelo mesmo motivo. Os alunos de consultoria online hoje compram atendimento, não produto. Cada aluno novo é mais uma hora sua. Não existe um método empacotado que possa ser entregue sem você em cada sessão.</p>
+        <p>E o vídeo não converte porque não tem para onde levar ninguém. Conteúdo sem produto por trás é entretenimento. Aquisição é conteúdo com uma oferta esperando no fim.</p>
+        <p>Nenhum desses três problemas (receita por hora, online sem produto, vídeo sem destino) se resolve gravando mais. Os três se resolvem com <mark>arquitetura de produto.</mark></p>
+      </div>
+    </section>
+
+    <!-- 03 -->
+    <section id="s3">
+      <div class="eyebrow"><i></i>03 · O diagnóstico</div>
+      <h2>Quatro frentes, quatro perguntas respondidas por escrito.</h2>
+      <div class="frentes">
+        <article class="frente">
+          <div class="n"><span></span>Frente 1 · Metodologia</div>
+          <h3>O que exatamente você vende?</h3>
+          <p>Extração e formalização do seu método: como você avalia um aluno novo, monta o bloco de treino, progride entre níveis, decide um ajuste. O que você faz no presencial que ninguém ensinou a fazer online. Vira um método nomeado, documentado e defensável: a base do <strong>mecanismo único</strong>.</p>
+        </article>
+        <article class="frente">
+          <div class="n"><span></span>Frente 2 · Cliente</div>
+          <h3>Para quem, exatamente?</h3>
+          <p>Análise dos seus casos de sucesso reais, presenciais e online. Quem deu mais certo com você, o que essas pessoas tinham em comum, a dor que as fez te procurar, o que tentaram antes e falhou. Daí sai o perfil exato do aluno que o produto vai atender.</p>
+        </article>
+        <article class="frente">
+          <div class="n"><span></span>Frente 3 · Ecossistema</div>
+          <h3>Quais produtos, e como cada um é montado?</h3>
+          <p>O coração do trabalho. Não é escolher "um produto digital". É desenhar a escada completa: entrada, produto principal, recorrência, premium e B2B. Para cada estrutura, formato de entrega, promessa, faixa de preço, esforço operacional seu e papel no conjunto. E a recomendação de qual vira o MVP da Fase 2.</p>
+        </article>
+        <article class="frente">
+          <div class="n"><span></span>Frente 4 · Viabilidade</div>
+          <h3>Os números fecham?</h3>
+          <p>Levantamento dos seus números atuais e plano financeiro com três cenários, tempo de retorno, custo de aquisição estimado por canal e as métricas que a Fase 3 vai medir. Se um produto não fecha na conta, ele sai do plano antes de custar dinheiro.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- 04 -->
+    <section id="s4">
+      <div class="eyebrow"><i></i>04 · Estruturas de produto</div>
+      <h2>O mapa: cinco estruturas possíveis.</h2>
+      <div class="prose" style="margin-bottom:20px">
+        <p class="lede">Existem cinco estruturas viáveis para o seu caso. O diagnóstico define quais delas entram e qual delas vira o MVP. <mark>O erro clássico é tentar rodar as cinco ao mesmo tempo.</mark></p>
+      </div>
+      <div class="estruturas">
+        <article class="est">
+          <div class="est-head"><span class="chip">E1</span><h3>Produto de entrada</h3><span class="tick">R$ 47 – R$ 197</span></div>
+          <dl class="spec">
+            <dt>O que é</dt><dd>Um protocolo fechado e autoexecutável: desafio de 21 ou 30 dias, guia de treino, protocolo inicial. Sem acompanhamento individual.</dd>
+            <dt>Promessa</dt><dd>Uma transformação pequena, rápida e verificável: a primeira prova de que o seu método funciona sem você na sala.</dd>
+            <dt>Formato</dt><dd>PDF e vídeos curtos, ou área de membros simples. Entrega 100% automatizada.</dd>
+            <dt>Esforço seu</dt><dd>Alto na criação, praticamente zero na operação.</dd>
+            <dt>Papel</dt><dd>Máquina de lista e filtro. É o destino que os seus vídeos não têm hoje.</dd>
+            <dt>Risco</dt><dd>Vender barato sem ter para onde subir. Só faz sentido se existir um degrau acima já pronto.</dd>
+          </dl>
+        </article>
+        <article class="est">
+          <div class="est-head"><span class="chip">E2</span><h3>Programa fechado (o método)</h3><span class="tick">R$ 497 – R$ 997</span></div>
+          <dl class="spec">
+            <dt>O que é</dt><dd>O seu método completo com início, meio e fim: 8 a 12 semanas, trilha por nível, blocos progressivos, encontros em grupo e suporte coletivo.</dd>
+            <dt>Promessa</dt><dd>O resultado que os seus alunos presenciais já alcançam, entregue em turma, online.</dd>
+            <dt>Formato</dt><dd>Área de membros, calls quinzenais e grupo de suporte. Turmas com data de início.</dd>
+            <dt>Esforço seu</dt><dd>Alto na criação da trilha, médio e previsível na operação, porque o suporte é coletivo, não individual.</dd>
+            <dt>Papel</dt><dd>É o produto que quebra o teto de horas: o mesmo esforço atende 10 ou 100 pessoas. Candidato natural a MVP.</dd>
+            <dt>Risco</dt><dd>Programa engessado. A solução é trilha com pontos de decisão, não vídeo único para todo mundo. Isso é desenho, e é parte do diagnóstico.</dd>
+          </dl>
+        </article>
+        <article class="est">
+          <div class="est-head"><span class="chip">E3</span><h3>Assinatura e comunidade</h3><span class="tick">R$ 97 – R$ 197 / mês</span></div>
+          <dl class="spec">
+            <dt>O que é</dt><dd>Acesso contínuo por mensalidade: novos blocos de treino todo mês, biblioteca de exercícios, comunidade ativa, encontro mensal ao vivo.</dd>
+            <dt>Promessa</dt><dd>Não parar. É o produto de quem terminou o programa e não quer voltar à estaca zero.</dd>
+            <dt>Formato</dt><dd>Plataforma ou comunidade fechada, com cadência mensal de conteúdo.</dd>
+            <dt>Esforço seu</dt><dd>Baixo por aluno, mas constante. Exige cadência: se o conteúdo para, o cancelamento dispara.</dd>
+            <dt>Papel</dt><dd>Receita recorrente e previsível, que não zera no dia 1 de cada mês.</dd>
+            <dt>Risco</dt><dd>Lançar assinatura sem base de alunos formados. Normalmente vem depois do E2, não antes.</dd>
+          </dl>
+        </article>
+        <article class="est">
+          <div class="est-head"><span class="chip">E4</span><h3>Consultoria premium (o que você já faz)</h3><span class="tick">Ticket alto · vagas limitadas</span></div>
+          <dl class="spec">
+            <dt>O que é</dt><dd>O seu atendimento individual, presencial ou online, reposicionado: vagas limitadas, processo formalizado, preço coerente com o método documentado.</dd>
+            <dt>Promessa</dt><dd>Acompanhamento direto com você, com escassez real.</dd>
+            <dt>Formato</dt><dd>O que você já entrega, com processo e entregáveis definidos.</dd>
+            <dt>Esforço seu</dt><dd>Alto por aluno, e é por isso que precisa ser caro e limitado.</dd>
+            <dt>Papel</dt><dd>Sustenta o caixa enquanto o resto é construído e ancora o preço de tudo abaixo. É o produto que financia a transição.</dd>
+            <dt>Risco</dt><dd>Nenhum estrutural. O risco é continuar cobrando por hora um trabalho que já vale mais.</dd>
+          </dl>
+        </article>
+        <article class="est">
+          <div class="est-head"><span class="chip">E5</span><h3>B2B e parcerias</h3><span class="tick">R$ 1.500 – R$ 5.000 / contrato</span></div>
+          <dl class="spec">
+            <dt>O que é</dt><dd>Turmas fechadas, licenciamento do método ou programas para academias, marcas e clubes de bem-estar.</dd>
+            <dt>Promessa</dt><dd>Para o parceiro: um programa pronto, com método e responsável, sem precisar montar nada.</dd>
+            <dt>Formato</dt><dd>Contrato por turma ou por período, com o E2 rodando por baixo.</dd>
+            <dt>Esforço seu</dt><dd>Alto na negociação, baixo na entrega, porque reaproveita o E2.</dd>
+            <dt>Papel</dt><dd>Acesso a bases de clientes qualificados sem custo de tráfego. Um contrato pode valer meses de venda direta.</dd>
+            <dt>Risco</dt><dd>Bater na porta de uma academia sem produto estruturado. Entra depois, com o MVP validado.</dd>
+          </dl>
+        </article>
+      </div>
+    </section>
+
+    <!-- 05 -->
+    <section id="s5">
+      <div class="eyebrow"><i></i>05 · As três rotas</div>
+      <h2>A escolha da rota define o que a Fase 2 constrói.</h2>
+      <div class="prose" style="margin-bottom:20px">
+        <p>As cinco estruturas não entram todas de uma vez. Existem três caminhos possíveis, e o diagnóstico recomenda um, com a justificativa por escrito. Pelo que já sabemos do seu caso, a Rota B é a candidata mais forte, mas é o diagnóstico que confirma.</p>
+      </div>
+      <div class="rotas">
+        <article class="rota">
+          <div class="tag">Rota A</div>
+          <h3>Recorrência primeiro</h3>
+          <p>Núcleo na assinatura (E3), sustentado pela premium (E4). Receita previsível mais cedo, ticket menor, exige volume e cadência de conteúdo desde o primeiro mês.</p>
+          <div class="if"><b>Indicada se</b> a análise mostrar que a sua base atual migra para assinatura e o conteúdo gerar volume rápido.</div>
+        </article>
+        <article class="rota">
+          <div class="tag">Rota B</div>
+          <h3>Método primeiro</h3>
+          <p>Núcleo no programa fechado (E2), com a entrada (E1) alimentando as turmas e a assinatura (E3) vindo depois, formada por quem concluir. Ticket maior por venda, menos volume necessário, receita em ondas de turma.</p>
+          <div class="if"><b>Indicada se</b> o seu método tiver progressão forte o bastante para sustentar uma promessa de 8 a 12 semanas, que é o que a Frente 1 vai apurar.</div>
+        </article>
+        <article class="rota">
+          <div class="tag">Rota C</div>
+          <h3>Premium primeiro</h3>
+          <p>Reposicionar o atendimento (E4), usar o caixa gerado para financiar a construção do E2 e só então abrir para o digital. Mais lenta, muito mais barata, risco quase nulo.</p>
+          <div class="if"><b>Indicada se</b> a viabilidade mostrar que o custo de aquisição digital ainda não fecha no seu ticket.</div>
+        </article>
+      </div>
+    </section>
+
+    <!-- 06 -->
+    <section id="s6">
+      <div class="eyebrow"><i></i>06 · As quatro fases</div>
+      <h2>O caminho inteiro, do papel ao produto validado.</h2>
+      <div class="prose" style="margin-bottom:20px">
+        <p>Cada fase só começa quando a anterior fecha, e cada uma entrega uma coisa que você pode segurar na mão. Esta proposta contrata a Fase 1. As fases 2, 3 e 4 são desenhadas dentro dela e orçadas ao fim, quando a gente já souber exatamente o que vai construir. A ideia é que, a partir da Fase 3, o próprio produto comece a financiar o restante.</p>
+      </div>
+      <div class="fases">
+
+        <article class="fase now">
+          <div class="fase-head"><span class="num">Fase 1</span><h3>Diagnóstico</h3><span class="val">R$ 2.500 · esta proposta</span></div>
+          <p class="obj">Decidir. Sair com o método formalizado, o cliente exato, o mapa de produtos, a rota escolhida e a viabilidade no papel. É o documento que orienta tudo o que vem depois.</p>
+          <dl class="grid">
+            <div><dt>Você recebe</dt><dd><b>Documento de Diagnóstico</b>, mecanismo único, perfil de cliente, mapa do ecossistema, fichas de produto, plano de viabilidade, roadmap das fases 2 a 4 e reunião de apresentação.</dd></div>
+            <div><dt>Duração</dt><dd><b>3 semanas.</b> Imersão, desenho, viabilidade e fechamento, com dois encontros de trabalho ao vivo.</dd></div>
+            <div><dt>Fecha quando</dt><dd>A rota está escolhida, o MVP da Fase 2 está definido e o orçamento das próximas fases está na mesa.</dd></div>
+          </dl>
+        </article>
+
+        <article class="fase">
+          <div class="fase-head"><span class="num">Fase 2</span><h3>Execução e construção do MVP</h3><span class="val later">Orçada ao fim da Fase 1</span></div>
+          <p class="obj">Construir a menor versão do produto escolhido que já entrega o resultado prometido. Se for o programa fechado, é a trilha completa de uma turma, não o catálogo inteiro.</p>
+          <dl class="grid">
+            <div><dt>Você recebe</dt><dd><b>MVP pronto para rodar</b>: estrutura da trilha, material do aluno, área de membros simples, oferta escrita, página de inscrição e processo de entrega documentado.</dd></div>
+            <div><dt>Duração estimada</dt><dd><b>4 a 6 semanas</b>, dependendo do produto escolhido e do quanto do seu material presencial já existe.</dd></div>
+            <div><dt>Fecha quando</dt><dd>Dá para inscrever uma pessoa e entregar do começo ao fim sem improviso.</dd></div>
+          </dl>
+        </article>
+
+        <article class="fase">
+          <div class="fase-head"><span class="num">Fase 3</span><h3>Aplicação e teste com pessoas reais</h3><span class="val later">Orçada ao fim da Fase 1</span></div>
+          <p class="obj">Rodar o MVP com uma turma piloto pequena, escolhida a dedo, em condição de fundador. Não é lançamento. É teste com gente de verdade, medindo o que importa.</p>
+          <dl class="grid">
+            <div><dt>Você recebe</dt><dd><b>Turma piloto concluída</b> e um relatório de resultado: adesão, conclusão, resultado dos alunos, o que travou, o que sobrou, depoimentos reais e a primeira receita do produto.</dd></div>
+            <div><dt>Duração estimada</dt><dd><b>A duração do próprio programa</b>, tipicamente 4 a 8 semanas, mais uma de preparação e uma de fechamento.</dd></div>
+            <div><dt>Fecha quando</dt><dd>A turma termina e os dados estão na mesa, bons ou ruins.</dd></div>
+          </dl>
+        </article>
+
+        <article class="fase">
+          <div class="fase-head"><span class="num">Fase 4</span><h3>Melhorias e validação</h3><span class="val later">Orçada ao fim da Fase 1</span></div>
+          <p class="obj">Ajustar o produto com o que o piloto mostrou, definir o preço de verdade e decidir, com dados, se escala ou volta para a prancheta.</p>
+          <dl class="grid">
+            <div><dt>Você recebe</dt><dd><b>Produto revisado</b>, preço final definido, plano de aquisição para a próxima turma e uma decisão clara por escrito: escalar, ajustar ou parar.</dd></div>
+            <div><dt>Duração estimada</dt><dd><b>2 a 3 semanas</b> após o fim do piloto.</dd></div>
+            <div><dt>Fecha quando</dt><dd>Existe um produto validado, com preço, com provas e com um plano para a turma seguinte. A partir daqui é operação, não construção.</dd></div>
+          </dl>
+        </article>
+
+      </div>
+      <div class="card" style="margin-top:14px">
+        <h3 style="margin-bottom:9px">O retorno dos R$ 2.500</h3>
+        <p style="font-size:15px">O diagnóstico não compra um produto. Compra a certeza de qual produto construir e evita a versão cara do erro: meses de produção em cima de uma oferta que ninguém testou. Uma única decisão da Fase 1, o reposicionamento do seu atendimento individual, costuma cobrir o investimento antes de qualquer produto digital existir. E a partir da Fase 3 o produto começa a gerar a receita que financia o restante do caminho.</p>
+      </div>
+    </section>
+
+    <!-- 07 -->
+    <section id="s7">
+      <div class="eyebrow"><i></i>07 · Entregas e prazos</div>
+      <h2>O que você recebe na Fase 1.</h2>
+      <div class="entregas">
+        <div class="entrega"><div><b>Documento de Diagnóstico</b><span>Análise completa do negócio, da metodologia e do mercado.</span></div></div>
+        <div class="entrega"><div><b>Definição do Mecanismo Único</b><span>Seu método nomeado, documentado e posicionado, com o argumento de diferenciação por escrito.</span></div></div>
+        <div class="entrega"><div><b>Perfil de Cliente</b><span>O cliente exato, extraído dos seus casos reais, com dores, objeções e linguagem.</span></div></div>
+        <div class="entrega"><div><b>Mapa do Ecossistema</b><span>O desenho da escada completa e a rota recomendada, com justificativa.</span></div></div>
+        <div class="entrega"><div><b>Ficha de cada produto</b><span>Promessa, formato de entrega, estrutura de conteúdo, preço e operação.</span></div></div>
+        <div class="entrega"><div><b>Plano de Viabilidade</b><span>Seus números levantados, três cenários, tempo de retorno e ponto de equilíbrio.</span></div></div>
+        <div class="entrega"><div><b>Roadmap das fases 2 a 4</b><span>Escopo, duração e orçamento de cada fase seguinte, em cima do produto escolhido.</span></div></div>
+        <div class="entrega"><div><b>Reunião de apresentação</b><span>Entrega ao vivo do diagnóstico, com espaço para decisão conjunta.</span></div></div>
+      </div>
+
+      <h3 style="margin:30px 0 6px">Como funciona a Fase 1</h3>
+      <div class="timeline">
+        <div class="tl"><div class="when">Semana 0</div><div><b>Kickoff</b><p>Alinhamento, coleta de material, histórico de alunos e dos casos de sucesso.</p></div></div>
+        <div class="tl"><div class="when">Semana 1</div><div><b>Imersão</b><p>Extração da metodologia, análise dos casos, definição do perfil de cliente, levantamento dos números.</p></div></div>
+        <div class="tl"><div class="when">Semana 2</div><div><b>Desenho</b><p>Mecanismo único, arquitetura do ecossistema, fichas de produto.</p></div></div>
+        <div class="tl"><div class="when">Semana 3</div><div><b>Viabilidade e fechamento</b><p>Cenários, escolha da rota, definição do MVP, roadmap e orçamento das fases 2 a 4.</p></div></div>
+        <div class="tl"><div class="when">Entrega</div><div><b>Apresentação</b><p>Reunião de apresentação do diagnóstico completo. Ao longo do período: dois encontros de trabalho ao vivo de cerca de 1h e comunicação assíncrona contínua.</p></div></div>
+      </div>
+
+      <div class="two" style="margin-top:26px">
+        <div class="card">
+          <h3 style="margin-bottom:10px">O que não está na Fase 1</h3>
+          <p style="font-size:14px" class="dim2">Tudo isso pertence às fases 2, 3 e 4, e é orçado ao fim do diagnóstico, em cima do produto escolhido.</p>
+          <ul class="out" style="margin:0; padding:0">
+            <li>Construção do MVP</li>
+            <li>Gravação, edição e roteiro</li>
+            <li>Área de membros e página</li>
+            <li>Turma piloto</li>
+            <li>Tráfego pago e mídia</li>
+            <li>Identidade visual</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3 style="margin-bottom:10px">O que precisamos de você</h3>
+          <ul style="margin:0; padding-left:18px; font-size:14.5px; display:flex; flex-direction:column; gap:9px">
+            <li>Disponibilidade para os dois encontros de trabalho e para as perguntas da imersão.</li>
+            <li>Acesso ao histórico dos seus melhores alunos, presenciais e online: antes e depois, tempo de acompanhamento, o que funcionou.</li>
+            <li>Os seus números: quantos alunos, quanto cobra, quanto fatura. Sem eles a viabilidade não fecha.</li>
+            <li>Manter a rotina de conteúdo que você já tem, sem investir em produção nova até o diagnóstico fechar. O vídeo vai ganhar um destino na Fase 2.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 08 -->
+    <section id="s8" class="invert">
+      <div class="eyebrow"><i></i>08 · Investimento</div>
+      <div class="price"><span class="v">R$ 2.500</span><span class="u">Fase 1 · Diagnóstico de Produto e Ecossistema<br>escopo completo descrito neste documento</span></div>
+      <p style="max-width:56ch; font-size:15.5px">Você tem um método que funciona quando você está na sala. O que falta não é conteúdo nem esforço. É estrutura de produto em volta do que você já sabe fazer. As fases 2, 3 e 4 recebem escopo e valor ao fim desta, e a partir do piloto o produto passa a pagar o próprio caminho.</p>
+      <dl class="terms">
+        <div><dt>Pagamento</dt><dd>100% na assinatura</dd></div>
+        <div><dt>Início</dt><dd>Na assinatura</dd></div>
+        <div><dt>Entrega da Fase 1</dt><dd>3 semanas após o kickoff</dd></div>
+      </dl>
+    </section>
+
+    <footer>
+      <span>Lastro House</span>
+      <span>Proposta comercial · Adelielson Júnior · 2026</span>
+    </footer>
+
+  </main>
+</div>
+
+</body>
+</html>
